@@ -1,0 +1,4 @@
+kafka-python==2.0.2
+python-dateutil==2.8.2
+rel==0.4.9.5
+websocket-client==1.7.0
