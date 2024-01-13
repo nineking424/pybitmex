@@ -6,7 +6,7 @@ import json
 from producer import MessageProducer
 
 message_producer=None
-BOOTSTRAP_SERVERS='kafka-broker:9094'
+BOOTSTRAP_SERVERS='kafka-broker:9092'
 
 def on_message(ws, msg):
     print(msg)

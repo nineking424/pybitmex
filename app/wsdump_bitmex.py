@@ -7,7 +7,7 @@ import sys
 import threading
 
 INTERVAL_SECONDS = 5
-BOOTSTRAP_SERVERS='kafka-broker:9094'
+BOOTSTRAP_SERVERS='kafka-broker:9092'
 
 message_producer=None
 last_received_time=0

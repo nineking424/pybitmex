@@ -1,5 +1,3 @@
-# docker build -t nineking424/pybitmex .
-# docker image inspect nineking424/pybitmex
  FROM python:3.10-alpine
 
 COPY app /app
