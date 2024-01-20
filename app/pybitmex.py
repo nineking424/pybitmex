@@ -4,6 +4,8 @@ from producer import MessageProducer
 import sys
 import threading
 import os
+from log import get_logger
+logger=get_logger('pybitmex')
 
 ## dotenv
 import os
@@ -41,24 +43,24 @@ def on_message(ws, msg):
     global last_received_time
     last_received_time = time.time()
     
-    # print(msg) # For debugging
+    # logger.info(msg) # For debugging
     res = message_producer.send_message(msg)
     total = total + 1
-    # print(res) # For debuggingSUBSCRIBE
+    # logger.info(res) # For debuggingSUBSCRIBE
 
 def on_error(ws, error):
-    print("### on_error ###")
-    print(error)
+    logger.info("### on_error ###")
+    logger.info(error)
     sys.exit(1)
 
 def on_close(ws, close_status_code, close_msg):
-    print("### on_close ###")
-    print(close_status_code)
-    print(close_msg)
+    logger.info("### on_close ###")
+    logger.info(close_status_code)
+    logger.info(close_msg)
     sys.exit(1)
 
 def on_open(ws):
-    print("### on_open ###")
+    logger.info("### on_open ###")
     set_interval(healthcheck, INTERVAL_SECONDS)
 
 def init_kafka(topic):
@@ -66,8 +68,8 @@ def init_kafka(topic):
     try:
         message_producer = MessageProducer(BOOTSTRAP_SERVERS, topic)
     except Exception as e:
-        print(str(e))
-        print("Failed to initialize Kafka producer. Exiting...")
+        logger.info(str(e))
+        logger.info("Failed to initialize Kafka producer. Exiting...")
         sys.exit(1)
 
 def init_websocket():
@@ -82,8 +84,8 @@ def init_websocket():
 
         ws.run_forever()
     except Exception as e:
-        print(str(e))
-        print("Failed to initialize websocket. Exiting...")
+        logger.info(str(e))
+        logger.info("Failed to initialize websocket. Exiting...")
         sys.exit(1)
 
 def send_websocket_message(ws, message):
@@ -93,26 +95,26 @@ def healthcheck():
     global last_received_time
     current_time = time.time()
     elapsed_time = current_time - last_received_time if last_received_time else 0
-    print(f"Time elapsed since last message: {elapsed_time}. Total : {total}")
+    logger.info(f"Time elapsed since last message: {elapsed_time}. Total : {total}")
     if elapsed_time > INTERVAL_SECONDS:
         try:
-            print("Sent ping")
+            logger.info("Sent ping")
             send_websocket_message(ws, "ping")
         except Exception as e:
-            print("Failed to send ping. Exiting...")
+            logger.info("Failed to send ping. Exiting...")
             sys.exit(1)
 
 if __name__ == "__main__":
 
-    print("INTERVAL_SECONDS: ", INTERVAL_SECONDS)
-    print("BOOTSTRAP_SERVERS: ", BOOTSTRAP_SERVERS)
-    print("WEBSOCKET_URL: ", WEBSOCKET_URL)
-    print("SUBSCRIBE: ", SUBSCRIBE)
+    logger.info(f'INTERVAL_SECONDS: {INTERVAL_SECONDS}')
+    logger.info(f'BOOTSTRAP_SERVERS: {BOOTSTRAP_SERVERS}')
+    logger.info(f'WEBSOCKET_URL: {WEBSOCKET_URL}')
+    logger.info(f'SUBSCRIBE: {SUBSCRIBE}')
 
     # init kafka producer
     init_kafka(SUBSCRIBE.replace(":", "."))
     res = message_producer.send_message("PROGRAM START")
-    print(res)
+    logger.info(res)
     init_websocket()
 
 # python3 pybitmex.py

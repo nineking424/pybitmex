@@ -3,7 +3,9 @@ import sys
 import threading
 import os
 import time
+from log import get_logger
 
+logger = get_logger('kafka-test')
 ## dotenv
 import os
 from dotenv import load_dotenv
@@ -23,17 +25,12 @@ def init_kafka(topic):
     try:
         message_producer = MessageProducer(BOOTSTRAP_SERVERS, topic)
     except Exception as e:
-        print(str(e))
+        logger.info(str(e))
         print("Failed to initialize Kafka producer. Exiting...")
         sys.exit(1)
 
 if __name__ == "__main__":
 
-    print("INTERVAL_SECONDS: ", INTERVAL_SECONDS)
-    print("BOOTSTRAP_SERVERS: ", BOOTSTRAP_SERVERS)
-    print("WEBSOCKET_URL: ", WEBSOCKET_URL)
-    print("SUBSCRIBE: ", SUBSCRIBE)
-
-    init_kafka(SUBSCRIBE.replace(":", "."))
+    init_kafka("TEST")
     res = message_producer.send_message("START : " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
-    print(res)
+    logger.info(res)
