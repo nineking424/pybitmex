@@ -31,7 +31,7 @@ docker run --rm -it -e SUBSCRIBE=orderBookL2:XBTUSD -e BOOTSTRAP_SERVERS=192.168
 
 ## Run Test(2) - Docker compose
 ```bash
-docker compose -f docker-compose-local.yaml up # connect to 192.168.1.3:9092
+docker compose -f docker-compose-local.yaml up # connect to 192.168.1.3:9094
 docker compose -f docker-compose.yaml up
 docker compose -f docker-compose-all.yaml up
 ```
