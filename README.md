@@ -23,10 +23,10 @@ docker buildx build -t nineking424/pybitmex --platform=linux/amd64,linux/arm64 -
 
 ## Run Test(1) - Command
 ```bash
-docker run --rm -it -e SUBSCRIBE=instrument:XBTUSD -e BOOTSTRAP_SERVERS=192.168.1.3:9092 --pull always nineking424/pybitmex
-docker run --rm -it -e SUBSCRIBE=trade:XBTUSD -e BOOTSTRAP_SERVERS=192.168.1.3:9092 --pull always nineking424/pybitmex
-docker run --rm -it -e SUBSCRIBE=orderBookL2_25:XBTUSD -e BOOTSTRAP_SERVERS=192.168.1.3:9092 --pull always nineking424/pybitmex
-docker run --rm -it -e SUBSCRIBE=orderBookL2:XBTUSD -e BOOTSTRAP_SERVERS=192.168.1.3:9092 --pull always nineking424/pybitmex
+docker run --rm -it -e SUBSCRIBE=instrument:XBTUSD -e BOOTSTRAP_SERVERS=192.168.1.3:9094 --pull always nineking424/pybitmex
+docker run --rm -it -e SUBSCRIBE=trade:XBTUSD -e BOOTSTRAP_SERVERS=192.168.1.3:9094 --pull always nineking424/pybitmex
+docker run --rm -it -e SUBSCRIBE=orderBookL2_25:XBTUSD -e BOOTSTRAP_SERVERS=192.168.1.3:9094 --pull always nineking424/pybitmex
+docker run --rm -it -e SUBSCRIBE=orderBookL2:XBTUSD -e BOOTSTRAP_SERVERS=192.168.1.3:9094 --pull always nineking424/pybitmex
 ```
 
 ## Run Test(2) - Docker compose
