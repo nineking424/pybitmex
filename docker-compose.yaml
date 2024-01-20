@@ -1,0 +1,29 @@
+version: "3"
+x-pybitmex: &pybitmex
+  image: nineking424/pybitmex
+  command: ["python3", "pybitmex.py"]
+  pull_policy: always
+  restart: always
+  networks:
+    - mykafka-net
+
+services:
+  pybitmex1:
+    <<: *pybitmex
+    container_name: pybitmex1
+    environment:
+      SUBSCRIBE: instrument:XBTUSD
+  pybitmex2:
+    <<: *pybitmex
+    container_name: pybitmex2
+    environment:
+      SUBSCRIBE: trade:XBTUSD
+  pybitmex3:
+    <<: *pybitmex
+    container_name: pybitmex3
+    environment:
+      SUBSCRIBE: orderBookL2:XBTUSD
+networks:
+  # docker network create mykafka-net
+  mykafka-net:
+    external: true
