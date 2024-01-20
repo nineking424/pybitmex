@@ -1,5 +1,11 @@
 # pybitmex
 
+## Prepare
+```
+git clone https://github.com/nineking424/pybitmex.git
+cd pybitmex
+```
+
 ## Build
 ```
 docker buildx create --name cross-platform-builder --driver docker-container --use
