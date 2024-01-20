@@ -22,7 +22,17 @@ services:
     <<: *pybitmex
     container_name: pybitmex3
     environment:
+      SUBSCRIBE: quote:XBTUSD
+  pybitmex4:
+    <<: *pybitmex
+    container_name: pybitmex4
+    environment:
       SUBSCRIBE: orderBookL2:XBTUSD
+  pybitmex5:
+    <<: *pybitmex
+    container_name: pybitmex5
+    environment:
+      SUBSCRIBE: orderBookL2_25:XBTUSD
 networks:
   # docker network create mykafka-net
   mykafka-net:
