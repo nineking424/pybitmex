@@ -1,6 +1,5 @@
 import websocket
 import time
-import rel
 from producer import MessageProducer
 import sys
 import threading
@@ -22,6 +21,7 @@ message_producer=None
 last_received_time=0
 ws = None
 url = WEBSOCKET_URL + SUBSCRIBE
+total = 0
 
 def set_interval(func, interval):
     """
@@ -37,21 +37,28 @@ def set_interval(func, interval):
     wrapper()
 
 def on_message(ws, msg):
+    global total
     global last_received_time
     last_received_time = time.time()
     
     # print(msg) # For debugging
     res = message_producer.send_message(msg)
+    total = total + 1
     # print(res) # For debuggingSUBSCRIBE
 
 def on_error(ws, error):
+    print("### on_error ###")
     print(error)
+    sys.exit(1)
 
 def on_close(ws, close_status_code, close_msg):
-    print("### closed ###")
+    print("### on_close ###")
+    print(close_status_code)
+    print(close_msg)
+    sys.exit(1)
 
 def on_open(ws):
-    print("Opened connection")
+    print("### on_open ###")
     set_interval(healthcheck, INTERVAL_SECONDS)
 
 def init_kafka(topic):
@@ -73,7 +80,7 @@ def init_websocket():
                                 on_error=on_error,
                                 on_close=on_close)
 
-        ws.run_forever(dispatcher=rel, reconnect=5)  # Set dispatcher to automatic reconnection, 5 second reconnect delay if connection closed unexpectedly
+        ws.run_forever()
     except Exception as e:
         print(str(e))
         print("Failed to initialize websocket. Exiting...")
@@ -86,7 +93,7 @@ def healthcheck():
     global last_received_time
     current_time = time.time()
     elapsed_time = current_time - last_received_time if last_received_time else 0
-    print("Time elapsed since last message:", elapsed_time)
+    print(f"Time elapsed since last message: {elapsed_time}. Total : {total}")
     if elapsed_time > INTERVAL_SECONDS:
         try:
             print("Sent ping")
@@ -104,5 +111,8 @@ if __name__ == "__main__":
 
     # init kafka producer
     init_kafka(SUBSCRIBE.replace(":", "."))
+    res = message_producer.send_message("PROGRAM START")
+    print(res)
     init_websocket()
+
 # python3 pybitmex.py
